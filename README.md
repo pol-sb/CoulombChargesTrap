@@ -70,7 +70,9 @@ and it is intended to be used as a module file for the run_simulation.py script.
 
 ## Results <a name = "results"></a>
 
-*WIP*
+*WIP* :mechanic: :hand:
 
 ## References <a name = "references"></a>
+- *Lozovik, Yu. E., & Mandelshtam, V. A. (1990). Coulomb clusters in a trap. En Physics Letters A (Vol. 145, Issue 5, pp. 269-271). Elsevier BV.*
+
 - *Rafac, R., Schiffer, J. P., Hangst, J. S., Dubin, D. H., & Wales, D. J. (1991). Stable configurations of confined cold ionic systems. In Proceedings of the National Academy of Sciences (Vol. 88, Issue 2, pp. 483–486).*

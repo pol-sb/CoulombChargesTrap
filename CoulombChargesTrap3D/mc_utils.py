@@ -60,6 +60,7 @@ def initialize_system(
         conf_list.append(init_coords)
     return conf_list
 
+
 # TODO: Optimize this function!
 def total_pot_ener(cor: np.ndarray, **params):
 
@@ -87,6 +88,37 @@ def total_pot_ener(cor: np.ndarray, **params):
 
         sum_term += sum_term_j
         # print('sum_term: ', sum_term)
+
+    tot_ene = (q ** 2) * sum_term
+
+    return tot_ene
+
+
+def part_pot_ener(part_i: np.ndarray, pos_i: int, cor: np.ndarray, **params):
+
+    alpha = params["alpha"]
+    d = params["d"]
+    q = params["q"]
+    L = params["L"]
+
+    sum_term = 0
+    sum_term_j = 0
+
+    xi, yi, zi = part_i[0], part_i[1], part_i[2]
+    # term_d = 1.0 / (2.0 * (d ** 3))
+    # term_coord = (zi ** 2) + alpha * ((xi ** 2) + (yi ** 2))
+    term = (xi ** 2 + yi ** 2 + zi ** 2) / 2
+    # sum_term += term_d * term_coord
+
+    sum_term += term
+    for j in range(pos_i):
+        dist = np.linalg.norm((part_i - cor[j, :]))
+        # dist = 1 / distancesq(L, cor[i, :], cor[j, :])
+        # modu = 1 / np.sum(np.abs((cor[i, :] - cor[j, :])))
+        sum_term_j += 1 / dist
+
+    sum_term += sum_term_j
+    # print('sum_term: ', sum_term)
 
     tot_ene = (q ** 2) * sum_term
 

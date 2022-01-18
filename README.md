@@ -1,4 +1,4 @@
-# Coulomb Charges in a Trap
+# :electron: Coulomb Charges in a Trap :electron:
 
 ## Table of Contents
 
@@ -39,8 +39,7 @@ while the requirements.txt file is located in the cwd.
 ### Running
 
 Running the script is simple.
-After cloning the repository, the script "run_simulation.py" should be run
-with:
+After cloning the repository, the script "run_simulation.py" should be executed with:
 
 ```
 python3 run_simulation.py
@@ -72,3 +71,6 @@ and it is intended to be used as a module file for the run_simulation.py script.
 ## Results <a name = "results"></a>
 
 *WIP*
+
+## References <a name = "references"></a>
+- *Rafac, R., Schiffer, J. P., Hangst, J. S., Dubin, D. H., & Wales, D. J. (1991). Stable configurations of confined cold ionic systems. In Proceedings of the National Academy of Sciences (Vol. 88, Issue 2, pp. 483–486).*

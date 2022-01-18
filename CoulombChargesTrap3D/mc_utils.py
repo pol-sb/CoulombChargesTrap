@@ -1,9 +1,9 @@
+import gc
 import os
 import time
 
 import matplotlib.pyplot as plt
 import numpy as np
-
 
 # TODO: Add docstrings to all of the functions!
 
@@ -60,7 +60,7 @@ def initialize_system(
         conf_list.append(init_coords)
     return conf_list
 
-
+# TODO: Optimize this function!
 def total_pot_ener(cor: np.ndarray, **params):
 
     alpha = params["alpha"]
@@ -81,10 +81,8 @@ def total_pot_ener(cor: np.ndarray, **params):
         sum_term += term
         for j in range(i):
             dist = np.linalg.norm((cor[i, :] - cor[j, :]))
-
             # dist = 1 / distancesq(L, cor[i, :], cor[j, :])
             # modu = 1 / np.sum(np.abs((cor[i, :] - cor[j, :])))
-
             sum_term_j += 1 / dist
 
         sum_term += sum_term_j
@@ -101,7 +99,7 @@ def total_pot_ener(cor: np.ndarray, **params):
 # Maxwell-Bolzmann distribution is passed.
 def monte_carlo(rng: np.random.Generator, **params):
 
-    n_MCS = params["n_MCS"]
+    n_MCS = int(params["n_MCS"])
     coef_T = params["coef_T"]
 
     res_dict = {}
@@ -121,7 +119,8 @@ def monte_carlo(rng: np.random.Generator, **params):
         radius_list = []
 
         print_color(
-            f"\n [{time.strftime('%H:%M:%S')}] - Working for N = {N}", "green"
+            f"\n[{time.strftime('%H:%M:%S')}] - Working with N = {N} particles",
+            "green",
         )
 
         for c_ind, conf in enumerate(coord_arr):
@@ -135,7 +134,7 @@ def monte_carlo(rng: np.random.Generator, **params):
                 "blue",
             )
 
-            print(f"\nInitial energy:\n{total_pot_ener(conf, **params)}\n")
+            print(f"Initial energy:\n{total_pot_ener(conf, **params)}\n")
             print("Progress:")
 
             conf_traj = []
@@ -223,6 +222,7 @@ def monte_carlo(rng: np.random.Generator, **params):
             final_ener_list.append(energ_list)
             final_pos_list.append(conf_traj)
             final_T_list.append(T_list)
+            gc.collect()
 
         res_dict[f"{N}"] = {
             "Energies": final_ener_list,
@@ -231,12 +231,27 @@ def monte_carlo(rng: np.random.Generator, **params):
             "Radii": radius_list,
         }
 
+        # Freeing memory?
+        gc.collect()
+
+        # Clearing lists.
+        # TODO: Does this serve any purpose? I think it does not clear
+        # any memory.
+        conf_traj = []
+        energ_list = []
+        T_list = []
+        final_ener_list = []
+        final_T_list = []
+        final_pos_list = []
+        radius_list = []
+
     return res_dict
 
 
 def result_treatment(res_dict, sys_args):
 
     plt.style.use("seaborn-poster")
+    plt.switch_backend("agg")
 
     print_color("\n\nCalculations Done.", "green")
     print_color("Saving results...\n", "green")
@@ -246,6 +261,7 @@ def result_treatment(res_dict, sys_args):
     os.mkdir(base_path)
 
     for N in res_dict.keys():
+
         path_N = f"{base_path}/N_{N}"
         os.mkdir(path_N)
         for c_ind in range(len(res_dict[f"{N}"]["Energies"])):
@@ -254,7 +270,7 @@ def result_treatment(res_dict, sys_args):
             E_list = res_dict[f"{N}"]["Energies"][c_ind]
             T_list = res_dict[f"{N}"]["Temperatures"][c_ind]
             radius = res_dict[f"{N}"]["Radii"][c_ind]
-            n_MCS = sys_args["n_MCS"]
+            n_MCS = int(sys_args["n_MCS"])
 
             # Saving the final configuration (or the entire system trajectory)
             # to a .xyz file.
@@ -275,74 +291,75 @@ def result_treatment(res_dict, sys_args):
                 f.write(f"Final T: {T_list[-1]}\n")
 
             # Plotting the energies over time.
-            plt.plot(range(len(E_list)), E_list)
-            plt.xlabel("Iterations")
-            plt.ylabel("Energy")
-            plt.title(f"Evolution of the energy for N = {N}")
-            plt.savefig(f"{path_N}/conf_{c_ind+1}_E_v_iter.png", dpi=800)
-            plt.savefig(
-                f"{path_N}/conf_{c_ind+1}_E_v_iter_nobg.png",
-                dpi=800,
+            fig = plt.figure(num=1, clear=True)
+            ax = fig.add_subplot()
+            ax.plot(range(len(E_list)), E_list)
+            ax.set_xlabel("Iterations")
+            ax.set_ylabel("Energy")
+            ax.set_title(f"Evolution of the energy for N = {N}")
+            fig.savefig(f"{path_N}/conf_{c_ind+1}_E_v_iter.svg", dpi=800)
+            fig.savefig(
+                f"{path_N}/conf_{c_ind+1}_E_v_iter_nobg.svg",
                 transparent=True,
             )
-            plt.clf()
 
-            plt.subplot(2, 1, 1)
-            plt.plot(range(len(E_list)), E_list)
-            plt.xlabel("Iterations")
-            plt.ylabel("Energy")
-            plt.title(f"Evolution of the energy for N = {N}")
-            plt.subplot(2, 1, 2)
-            plt.plot(
+            fig = plt.figure(num=1, clear=True)
+            ax1 = fig.add_subplot(2, 1, 1)
+            ax1.plot(range(len(E_list)), E_list)
+            ax1.set_xlabel("Iterations")
+            ax1.set_ylabel("Energy")
+            ax1.set_title(f"Evolution of the energy for N = {N}")
+
+            ax2 = fig.add_subplot(2, 1, 2)
+            ax2.plot(
                 range(int(n_MCS * 0.60), n_MCS + 1),
-                E_list[int((n_MCS * 0.60)):],
+                E_list[int((n_MCS * 0.60)) :],
             )
-            # plt.xlim(max(T_list[int((n_MCS * 0.60)) :]), 0)
-            plt.title(
+            ax2.set_title(
                 f"Evolution of the energy for N = {N}, after"
                 f" {int(n_MCS * 0.60)} iter."
             )
-            plt.xlabel("Iterations")
-            plt.ylabel("Energy")
-            plt.tight_layout()
-            plt.savefig(f"{path_N}/conf_{c_ind+1}_E_v_iter_doble.png", dpi=800)
-            plt.savefig(
-                f"{path_N}/conf_{c_ind+1}_E_v_iter_doble_nobg.png",
-                dpi=800,
+            ax2.set_xlabel("Iterations")
+            ax2.set_ylabel("Energy")
+            fig.tight_layout()
+            fig.savefig(f"{path_N}/conf_{c_ind+1}_E_v_iter_doble.svg", dpi=800)
+            fig.savefig(
+                f"{path_N}/conf_{c_ind+1}_E_v_iter_doble_nobg.svg",
                 transparent=True,
             )
-            plt.clf()
 
-            plt.subplot(2, 1, 1)
-            plt.plot(T_list, E_list)
-            plt.xlim(max(T_list), 0)
-            plt.xlabel("T")
-            plt.ylabel("Energy")
-            plt.title(f"Temperature effect on the Energy (N = {N})")
-            plt.subplot(2, 1, 2)
-            plt.plot(
-                T_list[int((n_MCS * 0.60)):],
-                E_list[int((n_MCS * 0.60)):],
+            fig = plt.figure(num=1, clear=True)
+            ax1 = fig.add_subplot(2, 1, 1)
+            ax1.plot(T_list, E_list)
+            ax1.set_xlim(max(T_list), 0)
+            ax1.set_xlabel("T")
+            ax1.set_ylabel("Energy")
+            ax1.set_title(f"Temperature effect on the Energy (N = {N})")
+
+            ax2 = fig.add_subplot(2, 1, 2)
+            ax2.plot(
+                T_list[int((n_MCS * 0.60)) :],
+                E_list[int((n_MCS * 0.60)) :],
             )
-            plt.xlim(max(T_list[int((n_MCS * 0.60)):]), 0)
-            plt.title(
+            ax2.set_xlim(max(T_list[int((n_MCS * 0.60)) :]), 0)
+            ax2.set_title(
                 f"Temperature effect on the Energy (N = {N}), after"
                 f" {int(n_MCS * 0.60)} iter."
             )
-            plt.xlabel("T")
-            plt.ylabel("Energy")
-            plt.tight_layout()
-            plt.savefig(
-                f"{path_N}/conf_{c_ind+1}_E_v_T.png",
-                dpi=800,
+            ax2.set_xlabel("T")
+            ax2.set_ylabel("Energy")
+            fig.tight_layout()
+            fig.savefig(
+                f"{path_N}/conf_{c_ind+1}_E_v_T.svg",
                 transparent=False,
             )
-            plt.savefig(
-                f"{path_N}/conf_{c_ind+1}_E_v_T_nobg.png",
-                dpi=800,
+            fig.savefig(
+                f"{path_N}/conf_{c_ind+1}_E_v_T_nobg.svg",
                 transparent=True,
             )
-            plt.clf()
+
+            # Garbage Collection
+            gc.collect()
 
         en_list = res_dict[f"{N}"]["Energies"]
         t_list = res_dict[f"{N}"]["Temperatures"]
@@ -368,6 +385,7 @@ class SimulateIonsTrap:
 
         res_dict = monte_carlo(rng, **sys_arg)
         result_treatment(res_dict, sys_arg)
+        gc.collect()
 
 
 if __name__ == "__main__":

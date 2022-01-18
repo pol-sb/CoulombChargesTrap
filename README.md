@@ -39,7 +39,7 @@ while the requirements.txt file is located in the cwd.
 ### Running
 
 Running the script is simple.
-After cloning the repository, the script "run_simulation.py" should be executed with:
+After cloning the repository, the script "run_simulation.py" inside the "CoulombChargesTrap3D" folder should be executed with:
 
 ```
 python3 run_simulation.py

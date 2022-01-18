@@ -11,11 +11,7 @@
 This repository contains a script which performs simulations of Coulomb clusters confined in a harmonic potential.
 
 These simulations lead to simple, "polyhedral" structures if the system
-is cooled to low enough temperatures.
-
-The program aims to help visualize these structures by finding the potential
-energy minimum of the system and its geometry by using the Monte Carlo
-method.
+is cooled to low enough temperatures. The program aims to help visualize these structures by finding the potential energy minimum of the system and its geometry by using the Monte Carlo method.
 
 The code is VERY unoptimized as of now, but it will be improved in the future.
 

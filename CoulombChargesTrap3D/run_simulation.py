@@ -23,9 +23,10 @@ ar_dict = {
     "T": 10,
     "T_f": 10e-6,
     "confs": 2,
+    "plot": False,
 }
 
-N_list = [2]
+N_list = [4]
 
 # Unit length (d)
 d = ((ar_dict["q"] ** 2) / ar_dict["m"] * (ar_dict["omega"] ** 2)) ** (1 / 3)

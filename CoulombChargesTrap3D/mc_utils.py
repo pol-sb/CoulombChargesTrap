@@ -73,17 +73,17 @@ def total_pot_ener(cor: np.ndarray, **params):
     for i in range(cor.shape[0]):
         sum_term_j = 0
 
-        xi, yi, zi = cor[i, 0], cor[i, 1], cor[i, 2]
         # term_d = 1.0 / (2.0 * (d ** 3))
-        # term_coord = (zi ** 2) + alpha * ((xi ** 2) + (yi ** 2))
-        term = (xi ** 2 + yi ** 2 + zi ** 2) / 2
-
         # sum_term += term_d * term_coord
+        # term_coord = (zi ** 2) + alpha * ((xi ** 2) + (yi ** 2))
+
+        xi, yi, zi = cor[i, 0], cor[i, 1], cor[i, 2]
+        term = (xi ** 2 + yi ** 2 + zi ** 2) / 2
         sum_term += term
         for j in range(i):
-            dist = np.linalg.norm((cor[i, :] - cor[j, :]))
             # dist = 1 / distancesq(L, cor[i, :], cor[j, :])
             # modu = 1 / np.sum(np.abs((cor[i, :] - cor[j, :])))
+            dist = np.linalg.norm((cor[i, :] - cor[j, :]))
             sum_term_j += 1 / dist
 
         sum_term += sum_term_j
@@ -221,12 +221,14 @@ def monte_carlo(rng: np.random.Generator, **params):
                 # of the execution.
                 T *= coef_T
 
-                # Writing each configuration, T and E to a list, which will
+                # Writing each T and E to a list, which will
                 # be plotted or exported later to a '.xyz' file for
                 # representation.
-                energ_list.append(perturb_E)
-                T_list.append(T)
-                conf_traj.append(conf)
+
+            # Saving the last configuration
+            energ_list.append(perturb_E)
+            T_list.append(T)
+            conf_traj.append(conf)
 
             Pacc = (Nacc / n_MCS) * 100
 
@@ -322,73 +324,76 @@ def result_treatment(res_dict, sys_args):
                 f.write(f"Radius: {radius}\n")
                 f.write(f"Final T: {T_list[-1]}\n")
 
-            # Plotting the energies over time.
-            fig = plt.figure(num=1, clear=True)
-            ax = fig.add_subplot()
-            ax.plot(range(len(E_list)), E_list)
-            ax.set_xlabel("Iterations")
-            ax.set_ylabel("Energy")
-            ax.set_title(f"Evolution of the energy for N = {N}")
-            fig.savefig(f"{path_N}/conf_{c_ind+1}_E_v_iter.svg", dpi=800)
-            fig.savefig(
-                f"{path_N}/conf_{c_ind+1}_E_v_iter_nobg.svg",
-                transparent=True,
-            )
+            if sys_args["plot"]:
+                # Plotting the energies over time.
+                fig = plt.figure(num=1, clear=True)
+                ax = fig.add_subplot()
+                ax.plot(range(len(E_list)), E_list)
+                ax.set_xlabel("Iterations")
+                ax.set_ylabel("Energy")
+                ax.set_title(f"Evolution of the energy for N = {N}")
+                fig.savefig(f"{path_N}/conf_{c_ind+1}_E_v_iter.svg", dpi=800)
+                fig.savefig(
+                    f"{path_N}/conf_{c_ind+1}_E_v_iter_nobg.svg",
+                    transparent=True,
+                )
 
-            fig = plt.figure(num=1, clear=True)
-            ax1 = fig.add_subplot(2, 1, 1)
-            ax1.plot(range(len(E_list)), E_list)
-            ax1.set_xlabel("Iterations")
-            ax1.set_ylabel("Energy")
-            ax1.set_title(f"Evolution of the energy for N = {N}")
+                fig = plt.figure(num=1, clear=True)
+                ax1 = fig.add_subplot(2, 1, 1)
+                ax1.plot(range(len(E_list)), E_list)
+                ax1.set_xlabel("Iterations")
+                ax1.set_ylabel("Energy")
+                ax1.set_title(f"Evolution of the energy for N = {N}")
 
-            ax2 = fig.add_subplot(2, 1, 2)
-            ax2.plot(
-                range(int(n_MCS * 0.60), n_MCS + 1),
-                E_list[int((n_MCS * 0.60)) :],
-            )
-            ax2.set_title(
-                f"Evolution of the energy for N = {N}, after"
-                f" {int(n_MCS * 0.60)} iter."
-            )
-            ax2.set_xlabel("Iterations")
-            ax2.set_ylabel("Energy")
-            fig.tight_layout()
-            fig.savefig(f"{path_N}/conf_{c_ind+1}_E_v_iter_doble.svg", dpi=800)
-            fig.savefig(
-                f"{path_N}/conf_{c_ind+1}_E_v_iter_doble_nobg.svg",
-                transparent=True,
-            )
+                ax2 = fig.add_subplot(2, 1, 2)
+                ax2.plot(
+                    range(int(n_MCS * 0.60), n_MCS + 1),
+                    E_list[int((n_MCS * 0.60)) :],
+                )
+                ax2.set_title(
+                    f"Evolution of the energy for N = {N}, after"
+                    f" {int(n_MCS * 0.60)} iter."
+                )
+                ax2.set_xlabel("Iterations")
+                ax2.set_ylabel("Energy")
+                fig.tight_layout()
+                fig.savefig(
+                    f"{path_N}/conf_{c_ind+1}_E_v_iter_doble.svg", dpi=800
+                )
+                fig.savefig(
+                    f"{path_N}/conf_{c_ind+1}_E_v_iter_doble_nobg.svg",
+                    transparent=True,
+                )
 
-            fig = plt.figure(num=1, clear=True)
-            ax1 = fig.add_subplot(2, 1, 1)
-            ax1.plot(T_list, E_list)
-            ax1.set_xlim(max(T_list), 0)
-            ax1.set_xlabel("T")
-            ax1.set_ylabel("Energy")
-            ax1.set_title(f"Temperature effect on the Energy (N = {N})")
+                fig = plt.figure(num=1, clear=True)
+                ax1 = fig.add_subplot(2, 1, 1)
+                ax1.plot(T_list, E_list)
+                ax1.set_xlim(max(T_list), 0)
+                ax1.set_xlabel("T")
+                ax1.set_ylabel("Energy")
+                ax1.set_title(f"Temperature effect on the Energy (N = {N})")
 
-            ax2 = fig.add_subplot(2, 1, 2)
-            ax2.plot(
-                T_list[int((n_MCS * 0.60)) :],
-                E_list[int((n_MCS * 0.60)) :],
-            )
-            ax2.set_xlim(max(T_list[int((n_MCS * 0.60)) :]), 0)
-            ax2.set_title(
-                f"Temperature effect on the Energy (N = {N}), after"
-                f" {int(n_MCS * 0.60)} iter."
-            )
-            ax2.set_xlabel("T")
-            ax2.set_ylabel("Energy")
-            fig.tight_layout()
-            fig.savefig(
-                f"{path_N}/conf_{c_ind+1}_E_v_T.svg",
-                transparent=False,
-            )
-            fig.savefig(
-                f"{path_N}/conf_{c_ind+1}_E_v_T_nobg.svg",
-                transparent=True,
-            )
+                ax2 = fig.add_subplot(2, 1, 2)
+                ax2.plot(
+                    T_list[int((n_MCS * 0.60)) :],
+                    E_list[int((n_MCS * 0.60)) :],
+                )
+                ax2.set_xlim(max(T_list[int((n_MCS * 0.60)) :]), 0)
+                ax2.set_title(
+                    f"Temperature effect on the Energy (N = {N}), after"
+                    f" {int(n_MCS * 0.60)} iter."
+                )
+                ax2.set_xlabel("T")
+                ax2.set_ylabel("Energy")
+                fig.tight_layout()
+                fig.savefig(
+                    f"{path_N}/conf_{c_ind+1}_E_v_T.svg",
+                    transparent=False,
+                )
+                fig.savefig(
+                    f"{path_N}/conf_{c_ind+1}_E_v_T_nobg.svg",
+                    transparent=True,
+                )
 
             # Garbage Collection
             gc.collect()

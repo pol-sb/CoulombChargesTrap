@@ -38,7 +38,7 @@ Additionally, for the GPU calculations to work, installing the CUDA toolkit is r
 apt install nvidia-cuda-toolkit
 ```
 
-check the official [the numba installation guide](https://numba.readthedocs.io/en/stable/user/installing.html) for more information.
+check the official [the numba installation guide](https://numba.readthedocs.io/en/stable/user/installing.html) for additional information.
 
 ### Running
 

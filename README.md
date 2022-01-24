@@ -24,13 +24,12 @@ These instructions will get you a copy of the project up and running on your loc
 
 The script works with python versions > 3.6, mainly because it uses f-strings for returning some results.
 
-Additionally, the script uses several python modules. These modules are
-listed on the 'requirements.txt' file, and can be installed by running:
+Additionally, the script uses several python modules. These modules are listed on the ["requirements.txt"](CoulombChargesTrap3D/run_simulation.py) file, and can be installed by running:
 
 ```
 python3 -m pip install -r requirements.txt 
 ```
-while the requirements.txt file is located in the cwd.
+while the file is located in the cwd.
 
 Additionally, for the GPU calculations to work, installing the CUDA toolkit is required. For example, in a Ubuntu installation the toolkit can be installed with the following command:
 
@@ -43,7 +42,7 @@ check the official [the numba installation guide](https://numba.readthedocs.io/e
 ### Running
 
 Running the script is simple.
-After cloning the repository, the script "run_simulation.py" inside the "CoulombChargesTrap3D" folder should be executed with:
+After cloning the repository, the script [run_simulation.py](CoulombChargesTrap3D/run_simulation.py) inside the "CoulombChargesTrap3D" folder should be executed with:
 
 ```
 python3 run_simulation.py
@@ -52,7 +51,7 @@ The program will run the simulation and save the results in a new folder named '
 
 
 ## Usage <a name = "usage"></a>
-As of now, the script 'run_simulation.py' must be changed manually to 
+As of now, the script [run_simulation.py](CoulombChargesTrap3D/run_simulation.py) must be changed manually to 
 modify any parameters of the system.
 
 An argument parser may be included in the future, but for now, the values

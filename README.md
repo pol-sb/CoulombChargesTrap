@@ -66,7 +66,34 @@ and it is intended to be used as a module file for the run_simulation.py script.
 
 ## Results <a name = "results"></a>
 
-*WIP* :mechanic: :hand:
+Here are some of the obtained geometries for $nMCS = 10^7$ and for different number of ions (N):
+
+### N = 4
+
+![N=4](images/vmdscene_4_final.png)
+
+### N = 5
+
+![N=5](images/vmdscene_5_new.png)
+
+### N=4
+
+![N=7](images/vmdscene_7_last.png)
+
+### N=25
+
+![N=25](images/vmdscene_25_last.png)
+
+
+### N=67
+
+![N=67](images/vmdscene_67_clear.png)
+
+### N=67
+
+![N=100](images/vmdscene_100.png)
+
+
 
 ## References <a name = "references"></a>
 - *Lozovik, Yu. E., & Mandelshtam, V. A. (1990). Coulomb clusters in a trap. En Physics Letters A (Vol. 145, Issue 5, pp. 269-271). Elsevier BV.*

@@ -4,14 +4,12 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
+from numba import jit
+
 
 # TODO: Add docstrings to all of the functions!
-
-# TODO: The monte carlo function should be optimized so that not all
-# interactions are computed at each iteration, only the interactions of the
-# excited particle with the rest. This is correct, right? Check.
-
 # TODO: Simplify the result treatment function.
+# TODO: Add again alpha, d, omega to the potential energy functions 
 
 
 def print_color(text: str, color: str):
@@ -62,12 +60,9 @@ def initialize_system(
 
 
 # TODO: Optimize this function!
-def total_pot_ener(cor: np.ndarray, **params):
-
-    alpha = params["alpha"]
-    d = params["d"]
-    q = params["q"]
-    L = params["L"]
+# This decorator makes this function run on GPU!
+@jit(nopython=True, fastmath=True)
+def total_pot_ener(cor: np.ndarray, alpha, d, q, L):
 
     sum_term = 0
     for i in range(cor.shape[0]):
@@ -94,37 +89,6 @@ def total_pot_ener(cor: np.ndarray, **params):
     return tot_ene
 
 
-def part_pot_ener(part_i: np.ndarray, pos_i: int, cor: np.ndarray, **params):
-
-    alpha = params["alpha"]
-    d = params["d"]
-    q = params["q"]
-    L = params["L"]
-
-    sum_term = 0
-    sum_term_j = 0
-
-    xi, yi, zi = part_i[0], part_i[1], part_i[2]
-    # term_d = 1.0 / (2.0 * (d ** 3))
-    # term_coord = (zi ** 2) + alpha * ((xi ** 2) + (yi ** 2))
-    term = (xi ** 2 + yi ** 2 + zi ** 2) / 2
-    # sum_term += term_d * term_coord
-
-    sum_term += term
-    for j in range(pos_i):
-        dist = np.linalg.norm((part_i - cor[j, :]))
-        # dist = 1 / distancesq(L, cor[i, :], cor[j, :])
-        # modu = 1 / np.sum(np.abs((cor[i, :] - cor[j, :])))
-        sum_term_j += 1 / dist
-
-    sum_term += sum_term_j
-    # print('sum_term: ', sum_term)
-
-    tot_ene = (q ** 2) * sum_term
-
-    return tot_ene
-
-
 # The Monte Carlo algorithm, used principally for N < 10 and a != 1,
 # moves ions randomly within a step size which depends on the T and keeps the
 # move only if the energy of the configuration is reduced or a random check in a
@@ -133,6 +97,11 @@ def monte_carlo(rng: np.random.Generator, **params):
 
     n_MCS = int(params["n_MCS"])
     coef_T = params["coef_T"]
+
+    alpha = params["alpha"]
+    d = params["d"]
+    q = params["q"]
+    L = params["L"]
 
     res_dict = {}
 
@@ -166,7 +135,7 @@ def monte_carlo(rng: np.random.Generator, **params):
                 "blue",
             )
 
-            print(f"Initial energy:\n{total_pot_ener(conf, **params)}\n")
+            print(f"Initial energy:\n{total_pot_ener(conf, alpha, d, q, L)}\n")
             print("Progress:")
 
             conf_traj = []
@@ -176,7 +145,7 @@ def monte_carlo(rng: np.random.Generator, **params):
             syst_shape = conf.shape
 
             T_list.append(T)
-            initial_E = total_pot_ener(conf, **params)
+            initial_E = total_pot_ener(conf, alpha, d, q, L)
             energ_list.append(initial_E)
 
             for mcs in range(n_MCS):
@@ -196,7 +165,7 @@ def monte_carlo(rng: np.random.Generator, **params):
                 conf_next = conf + perturb
 
                 # Computing the energy after the perturbation
-                perturb_E = total_pot_ener(conf_next, **params)
+                perturb_E = total_pot_ener(conf_next, alpha, d, q, L)
 
                 # Difference in energy between initial E and perturbed E.
                 delta_E = perturb_E - initial_E
@@ -265,7 +234,7 @@ def monte_carlo(rng: np.random.Generator, **params):
             "Radii": radius_list,
         }
 
-        # Freeing memory?
+        # Freeing memory
         gc.collect()
 
         # Clearing lists.

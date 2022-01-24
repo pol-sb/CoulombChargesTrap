@@ -13,7 +13,7 @@ This repository contains a script which performs simulations of Coulomb clusters
 These simulations lead to simple, "polyhedral" structures if the system
 is cooled to low enough temperatures. The program aims to help visualize these structures by finding the potential energy minimum of the system and its geometry by using the Monte Carlo method.
 
-The code is VERY unoptimized as of now, but it will be improved in the future.
+The code is VERY unoptimized as of now, but it will be improved in the future. The potential energy calculations are performed using the GPU by means of the "numba" python module.
 
 
 ## Getting Started <a name = "getting_started"></a>
@@ -31,6 +31,14 @@ listed on the 'requirements.txt' file, and can be installed by running:
 python3 -m pip install -r requirements.txt 
 ```
 while the requirements.txt file is located in the cwd.
+
+Additionally, for the GPU calculations to work, installing the CUDA toolkit is required. For example, in a Ubuntu installation the toolkit can be installed with the following command:
+
+```
+apt install nvidia-cuda-toolkit
+```
+
+check the official [the numba installation guide](https://numba.readthedocs.io/en/stable/user/installing.html) for more information.
 
 ### Running
 
@@ -84,12 +92,11 @@ Here are some of the obtained geometries for $nMCS = 10^7$ and for different num
 
 ![N=25](images/vmdscene_25_last.png)
 
-
 ### N=67
 
 ![N=67](images/vmdscene_67_clear.png)
 
-### N=67
+### N=100
 
 ![N=100](images/vmdscene_100.png)
 

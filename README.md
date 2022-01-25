@@ -62,8 +62,8 @@ Here is a quick overview of the parameters:
 - L: Lattice size (float)
 - q: Ionic charge (float)
 - m: Mass (float)
-- alpha: Symmetry of the external harmonic potential. Alpha = 1 for spherical symmetry and alpha != 1 for cylindrical symmetry.
-- omega: Natural frequency
+- alpha: Symmetry of the external harmonic potential. Alpha = 1 for spherical symmetry and alpha != 1 for cylindrical symmetry. (float)
+- omega: Natural frequency (float)
 - "T": Initial Temperature (float)
 - "T_f": Target temperature for the annealing process. (float, this needs to be approximately zero to be able to ignore the kinetic energy contribution)
 - confs: Number of initial configurations to prepare for the MC calculations (int)

@@ -64,12 +64,11 @@ Here is a quick overview of the parameters:
 - L: Lattice size (float)
 - q: Ionic charge (float)
 - m: Mass (float)
-- alpha: Symmetry of the external harmonic potential. Alpha = 1 for spherical
-symmetry and alpha != 1 for cylindrical symmetry.
+- alpha: Symmetry of the external harmonic potential. Alpha = 1 for spherical symmetry and alpha != 1 for cylindrical symmetry.
 - omega: Natural frequency
 
-The file "mc_utils.py" contains the main functions necessary for the simulation
-and it is intended to be used as a module file for the run_simulation.py script.
+The file [mc_utils.py](CoulombChargesTrap3D/mc_utils.py) contains the main functions necessary for the simulation
+and it is intended to be used as a module file for the [run_simulation.py](CoulombChargesTrap3D/run_simulation.py) script.
 
 ## Results <a name = "results"></a>
 

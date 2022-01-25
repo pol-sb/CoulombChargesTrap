@@ -74,7 +74,7 @@ and it is intended to be used as a module file for the [run_simulation.py](Coulo
 
 ## Results <a name = "results"></a>
 
-Here are some of the obtained geometries for $nMCS = 10^7$ and for different number of ions (N):
+Here are some of the obtained geometries for nMCS = 10^7 and for different number of ions (N):
 
 ### N = 4
 

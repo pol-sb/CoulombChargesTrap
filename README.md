@@ -78,28 +78,28 @@ Here are some of the obtained geometries for $nMCS = 10^7$ and for different num
 
 ### N = 4
 
-<img src="https://raw.githubusercontent.com/tetsuo420/CoulombChargesTrap/master/images/vmdscene_4.png" width=50% height=50%>
+<img src="https://raw.githubusercontent.com/tetsuo420/CoulombChargesTrap/master/images/vmdscene_4.png" width=40% height=40%>
 
 
 ### N = 5
 
-<img src="https://github.com/tetsuo420/CoulombChargesTrap/raw/master/images/vmdscene_5.png" width=50% height=50%>
+<img src="https://github.com/tetsuo420/CoulombChargesTrap/raw/master/images/vmdscene_5.png" width=40% height=40%>
 
 ### N=7
 
-<img src="https://github.com/tetsuo420/CoulombChargesTrap/raw/master/images/vmdscene_7.png" width=50% height=50%>
+<img src="https://github.com/tetsuo420/CoulombChargesTrap/raw/master/images/vmdscene_7.png" width=40% height=40%>
 
 ### N=25
 
-<img src="https://raw.githubusercontent.com/tetsuo420/CoulombChargesTrap/master/images/vmdscene_25.png" width=50% height=50%>
+<img src="https://raw.githubusercontent.com/tetsuo420/CoulombChargesTrap/master/images/vmdscene_25.png" width=40% height=40%>
 
 ### N=67
 
-<img src="https://github.com/tetsuo420/CoulombChargesTrap/raw/master/images/vmdscene_67.png" width=50% height=50%>
+<img src="https://github.com/tetsuo420/CoulombChargesTrap/raw/master/images/vmdscene_67.png" width=40% height=40%>
 
 ### N=100
 
-<img src="https://raw.githubusercontent.com/tetsuo420/CoulombChargesTrap/master/images/vmdscene_100.png" width=50% height=50%>
+<img src="https://raw.githubusercontent.com/tetsuo420/CoulombChargesTrap/master/images/vmdscene_100.png" width=40% height=40%>
 
 
 

@@ -54,9 +54,7 @@ The program will run the simulation and save the results in a new folder named '
 As of now, the script [run_simulation.py](CoulombChargesTrap3D/run_simulation.py) must be changed manually to 
 modify any parameters of the system.
 
-An argument parser may be included in the future, but for now, the values
-of the dictionary "ar_dict" inside the run_simulation script must be changed
-manually.
+An argument parser may be included in the future, but for now, the values of the dictionary "ar_dict" inside the run_simulation script must be changed manually.
 
 Here is a quick overview of the parameters:
 
@@ -66,6 +64,10 @@ Here is a quick overview of the parameters:
 - m: Mass (float)
 - alpha: Symmetry of the external harmonic potential. Alpha = 1 for spherical symmetry and alpha != 1 for cylindrical symmetry.
 - omega: Natural frequency
+- "T": Initial Temperature (float)
+- "T_f": Target temperature for the annealing process. (float, this needs to be approximately zero to be able to ignore the kinetic energy contribution)
+- confs: Number of initial configurations to prepare for the MC calculations (int)
+- plot: Whether to prepare plots for the results or not (bool)
 
 The file [mc_utils.py](CoulombChargesTrap3D/mc_utils.py) contains the main functions necessary for the simulation
 and it is intended to be used as a module file for the [run_simulation.py](CoulombChargesTrap3D/run_simulation.py) script.
@@ -76,27 +78,28 @@ Here are some of the obtained geometries for $nMCS = 10^7$ and for different num
 
 ### N = 4
 
-![N=4](images/vmdscene_4_final.png)
+<img src="https://raw.githubusercontent.com/tetsuo420/CoulombChargesTrap/master/images/vmdscene_4.png" width=50% height=50%>
+
 
 ### N = 5
 
-![N=5](images/vmdscene_5_new.png)
+<img src="https://github.com/tetsuo420/CoulombChargesTrap/raw/master/images/vmdscene_5.png" width=50% height=50%>
 
-### N=4
+### N=7
 
-![N=7](images/vmdscene_7_last.png)
+<img src="https://github.com/tetsuo420/CoulombChargesTrap/raw/master/images/vmdscene_7.png" width=50% height=50%>
 
 ### N=25
 
-![N=25](images/vmdscene_25_last.png)
+<img src="https://raw.githubusercontent.com/tetsuo420/CoulombChargesTrap/master/images/vmdscene_25.png" width=50% height=50%>
 
 ### N=67
 
-![N=67](images/vmdscene_67_clear.png)
+<img src="https://github.com/tetsuo420/CoulombChargesTrap/raw/master/images/vmdscene_67.png" width=50% height=50%>
 
 ### N=100
 
-![N=100](images/vmdscene_100.png)
+<img src="https://raw.githubusercontent.com/tetsuo420/CoulombChargesTrap/master/images/vmdscene_100.png" width=50% height=50%>
 
 
 

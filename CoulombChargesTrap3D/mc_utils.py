@@ -9,8 +9,6 @@ from numba import jit
 
 # TODO: Add docstrings to all of the functions!
 # TODO: Simplify the result treatment function.
-# TODO: Add again alpha, d, omega to the potential energy functions 
-
 
 def print_color(text: str, color: str):
     d_col = {
@@ -67,23 +65,13 @@ def total_pot_ener(cor: np.ndarray, alpha, d, q, L):
     sum_term = 0
     for i in range(cor.shape[0]):
         sum_term_j = 0
-
-        # term_d = 1.0 / (2.0 * (d ** 3))
-        # sum_term += term_d * term_coord
-        # term_coord = (zi ** 2) + alpha * ((xi ** 2) + (yi ** 2))
-
         xi, yi, zi = cor[i, 0], cor[i, 1], cor[i, 2]
-        term = (xi ** 2 + yi ** 2 + zi ** 2) / 2
+        term = ((alpha*(xi ** 2 + yi ** 2)) + zi ** 2) / 2*(d**3)
         sum_term += term
         for j in range(i):
-            # dist = 1 / distancesq(L, cor[i, :], cor[j, :])
-            # modu = 1 / np.sum(np.abs((cor[i, :] - cor[j, :])))
             dist = np.linalg.norm((cor[i, :] - cor[j, :]))
             sum_term_j += 1 / dist
-
         sum_term += sum_term_j
-        # print('sum_term: ', sum_term)
-
     tot_ene = (q ** 2) * sum_term
 
     return tot_ene
@@ -199,18 +187,21 @@ def monte_carlo(rng: np.random.Generator, **params):
             T_list.append(T)
             conf_traj.append(conf)
 
+            # Computing MC acceptance
             Pacc = (Nacc / n_MCS) * 100
 
             time_b = time.time()
             tot_t = time_b - time_a
             print_color("\n\nResults:", "blue")
 
+            # Computing radius of the final configuration
             radius = 0
             for part in conf:
                 radius += part[0] ** 2 + part[1] ** 2 + part[2] ** 2
             radius /= syst_shape[0]
             radius = np.sqrt(radius)
 
+            # Printing results
             print("Radius:", radius)
             print("Final energy:", initial_E)
             print(f"N_accept: {Nacc}\t\t P_accept: {Pacc:.3f}%")
@@ -238,8 +229,7 @@ def monte_carlo(rng: np.random.Generator, **params):
         gc.collect()
 
         # Clearing lists.
-        # TODO: Does this serve any purpose? I think it does not clear
-        # any memory.
+        # TODO: Check if this is actually useful
         conf_traj = []
         energ_list = []
         T_list = []
